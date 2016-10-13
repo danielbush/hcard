@@ -7,6 +7,7 @@ const express = require('express'),
       path = require('path'),
       logger = require('morgan'),
       app = express(),
+      viewsPath = path.resolve(__dirname, 'views'),
       publicPath = path.resolve(__dirname, 'public'),
       cssPath = path.resolve(__dirname, 'public', 'css'),
       imgPath = path.resolve(__dirname, 'public', 'img'),
@@ -16,6 +17,9 @@ const loggerType = (app.get('env') === 'development') ? 'dev' : 'combined';
 
 // Make React global because hCard assumes it.
 global.React = React;
+
+app.set('views', path.join(viewsPath));
+app.set('view engine', 'ejs');
 
 app.use(logger(loggerType));
 app.use(compression());
