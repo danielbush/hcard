@@ -3,6 +3,7 @@ const express = require('express'),
       React = require('react'),
       ReactDOMServer = require('react-dom/server'),
       compression = require('compression'),
+      errorhandler = require('errorhandler'),
       path = require('path'),
       logger = require('morgan'),
       app = express(),
@@ -29,6 +30,23 @@ app.get('/', (req, res) => {
     }
   });
 });
+
+
+// Dev error handler.
+if (app.get('env') === 'development') {
+  app.use(errorhandler());
+}
+
+// Default error handler.
+else {
+  app.use((err, req, res, next) => {
+    res.status(err.status || 500);
+    res.render('error', {
+      message: err.message,
+      error: {}
+    });
+  });
+}
 
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!');
