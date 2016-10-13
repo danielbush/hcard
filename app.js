@@ -4,15 +4,19 @@ const express = require('express'),
       ReactDOMServer = require('react-dom/server'),
       compression = require('compression'),
       path = require('path'),
+      logger = require('morgan'),
       app = express(),
       publicPath = path.resolve(__dirname, 'public'),
       cssPath = path.resolve(__dirname, 'public', 'css'),
       imgPath = path.resolve(__dirname, 'public', 'img'),
       distPath = path.resolve(__dirname, 'dist');
 
+const loggerType = (app.get('env') === 'development') ? 'dev' : 'combined';
+
 // Make React global because hCard assumes it.
 global.React = React;
 
+app.use(logger(loggerType));
 app.use(compression());
 app.use('/css', express.static(cssPath));
 app.use('/img', express.static(imgPath));
