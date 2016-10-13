@@ -1,0 +1,37 @@
+{
+  "name": "domain-solution",
+  "version": "0.1.0",
+  "description": "domain solution",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/danielbush/domain-solution"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "debug": "^2.2.0",
+    "errorhandler": "^1.4.3",
+    "express": "^4.14.0",
+    "express-session": "^1.14.1",
+    "method-override": "^2.3.6",
+    "morgan": "^1.7.0",
+    "multer": "^1.2.0",
+    "serve-favicon": "^2.3.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-as-promised": "^6.0.0",
+    "mocha": "^3.1.2"
+  },
+  "engines": {
+    "node": ">=4.0.0"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "test": "mocha --reporter spec test",
+    "test:watch": "mocha --watch --reporter spec test"
+  },
+  "keywords": [],
+  "author": "Daniel Bush",
+  "license": "BSD-2-Clause"
+}

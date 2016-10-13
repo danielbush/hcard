@@ -1,0 +1,6 @@
+node_modules/
+build/
+testBundle.js
+bundle.js
+bundle.test.js
+**.map
