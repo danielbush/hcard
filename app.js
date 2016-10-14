@@ -27,8 +27,24 @@ app.use('/css', express.static(cssPath));
 app.use('/img', express.static(imgPath));
 app.use(express.static(distPath));
 
+const hCardComponent = React.createFactory(require('./dist/main.js').default);
+const hCardProps = {
+  givenName: 'Sam',
+  surname: 'Fairfax',
+  email: 'sam.fairfax@fairfaxmedia.com.au',
+  phone: '0292822833',
+  houseNumber: '100',
+  street: 'Harris Street',
+  suburb: 'Pyrmont',
+  state: 'NSW',
+  postcode: '2009',
+  country: 'Australia'
+};
+
 app.get('/', (req, res) => {
-  res.render('index');
+  res.render('index', {
+    hCard: ReactDOMServer.renderToString(hCardComponent(hCardProps))
+  });
 });
 
 
