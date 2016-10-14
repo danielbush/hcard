@@ -28,11 +28,7 @@ app.use('/img', express.static(imgPath));
 app.use(express.static(distPath));
 
 app.get('/', (req, res) => {
-  res.sendFile(path.resolve(publicPath, 'index.html'), (err) => {
-    if (err) {
-      res.status(err.status).end();
-    }
-  });
+  res.render('index');
 });
 
 
