@@ -1,4 +1,12 @@
 
+// Maybe polyfill for react 15 and Object.assign.
+//
+// object-assign@4.1 will decide if to polyfill or not.
+// Also, we need to be using react 15.1+.
+// https://github.com/facebook/react/issues/6451#issuecomment-212154690
+
+Object.assign = require('object-assign');
+
 const express = require('express'),
       React = require('react'),
       ReactDOMServer = require('react-dom/server'),
