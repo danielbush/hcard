@@ -50,7 +50,7 @@ describe('hCard builder page /', function () {
 
   });
 
-  context('when js is turned on', function () {
+  xcontext('when js is turned on', function () {
 
     before(function (done) {
       const timeout = 30*1000;
@@ -103,7 +103,7 @@ describe('/submit', function () {
 
   });
 
-  context('when js is turned on', function () {
+  xcontext('when js is turned on', function () {
     // TODO
   });
 
