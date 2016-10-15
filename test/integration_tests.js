@@ -1,12 +1,23 @@
 // Tests output of express.
 //
-// TODO: for js-enabled agents, we will have to use something like wd, zombie?
+// For...
+// js-disabled agents - we'll use supertest/superagent.
+// js-enabled agents  - we'll use zombie.
+//   - these are SLOW
+//   - loading react from a cdn each time in a test is not good
+//
+// I think we're better off doing proper acceptance tests (real
+// browsers, selenium), so I'll keep js-enabled integration tests to a
+// minimum or disable.
 
 const chai = require('chai'),
       expect = chai.expect,
+      Browser = require('zombie'),
       request = require('supertest'),
       cheerio = require('cheerio'),
+      port = 3001,
       app = require('../app');
+
 
 describe('hCard builder page /', function () {
 
@@ -36,6 +47,28 @@ describe('hCard builder page /', function () {
           expect($('.hcardPreview').length).to.equal(1);
         })
         .end(err => done(err));
+    });
+
+  });
+
+  context('when js is turned on', function () {
+
+    before(function (done) {
+      this.timeout(10000);
+      this.server = app.listen(port);
+      this.browser = new Browser({
+        site: `http://localhost:${port}`,
+        silent: true  // get output from window.console.output if needed
+      });
+      this.browser.visit('/', done);
+    });
+
+    it('should return 200', function () {
+      expect(this.browser.statusCode);
+    });
+
+    after(function (done) {
+      this.server.close(done);
     });
 
   });
