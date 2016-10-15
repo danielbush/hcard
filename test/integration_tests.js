@@ -18,7 +18,6 @@ const chai = require('chai'),
       port = 3001,
       app = require('../app');
 
-
 describe('hCard builder page /', function () {
 
   context('when js is turned off', function () {
@@ -85,3 +84,27 @@ describe('hCard builder page /', function () {
 
 });
 
+describe('/submit', function () {
+
+  context('when js is turned off', function () {
+
+    beforeEach(function () {
+      this.request = request(app).post('/submit');
+    });
+
+    it('should redirect to /', function (done) {
+      this.request
+        .expect(303)
+        .expect(res => {
+          expect(res.header['location']).to.equal('/');
+        })
+        .end(err => done(err));
+    });
+
+  });
+
+  context('when js is turned on', function () {
+    // TODO
+  });
+
+});
