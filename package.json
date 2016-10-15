@@ -27,7 +27,8 @@
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",
     "mocha": "^3.1.2",
-    "nodemon": "^1.11.0"
+    "nodemon": "^1.11.0",
+    "supertest": "^2.0.0"
   },
   "engines": {
     "node": ">=6.0.0"
@@ -35,7 +36,10 @@
   "scripts": {
     "start": "node app.js",
     "start:dev": "nodemon app.js",
-    "test": "mocha --reporter spec test",
+    "start:test": "PORT=3001 NODE_ENV=test npm start & echo $! >.pid",
+    "pretest": "npm run start:test & sleep 2",
+    "test": "mocha --reporter spec test; kill $(cat .pid)",
+    "pretest:watch": "npm run pretest",
     "test:watch": "mocha --watch --reporter spec test"
   },
   "keywords": [],
