@@ -54,17 +54,27 @@ describe('hCard builder page /', function () {
   context('when js is turned on', function () {
 
     before(function (done) {
-      this.timeout(10000);
+      const timeout = 30*1000;
+      this.timeout(timeout);
       this.server = app.listen(port);
       this.browser = new Browser({
         site: `http://localhost:${port}`,
-        silent: true  // get output from window.console.output if needed
+        silent: true,  // get output from window.console.output if needed
+        waitDuration: timeout
       });
       this.browser.visit('/', done);
     });
 
     it('should return 200', function () {
-      expect(this.browser.statusCode);
+      expect(this.browser.statusCode).to.equal(200);
+    });
+
+    it('should have 1 hCard form', function () {
+      this.browser.assert.element('.hcardForm');
+    });
+
+    it('should have 1 hCard preview area', function () {
+      this.browser.assert.element('.hcardPreview');
     });
 
     after(function (done) {
