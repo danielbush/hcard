@@ -21,15 +21,26 @@ const express = require('express'),
       imgPath = path.resolve(__dirname, 'public', 'img'),
       distPath = path.resolve(__dirname, 'dist');
 
-const loggerType = (app.get('env') === 'development') ? 'dev' : 'combined';
-
 // Make React global because hCard assumes it.
 global.React = React;
 
 app.set('views', path.join(viewsPath));
 app.set('view engine', 'ejs');
 
-app.use(logger(loggerType));
+// Logging.
+
+switch (app.get('env')) {
+  case 'development':
+    app.use(logger('dev'));
+    break;
+  case 'test':
+    // So that test output isn't cluttered.
+    app.use(logger('dev', { skip: (req, res) => (res.statusCode < 400) }));
+    break;
+  default:
+    app.use(logger('combined'));
+}
+
 app.use(compression());
 app.use('/css', express.static(cssPath));
 app.use('/img', express.static(imgPath));

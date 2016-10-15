@@ -35,10 +35,10 @@
     "node": ">=6.0.0"
   },
   "scripts": {
-    "start": "./bin/start",
-    "start:dev": "nodemon ./bin/start",
-    "test": "mocha --reporter spec test",
-    "test:watch": "mocha --watch --reporter spec test"
+    "start": "NODE_ENV=production ./bin/start",
+    "start:dev": "NODE_ENV=development nodemon ./bin/start",
+    "test": "NODE_ENV=test mocha --reporter spec test",
+    "test:watch": "NODE_ENV=test mocha --watch --reporter spec test"
   },
   "keywords": [],
   "author": "Daniel Bush",
