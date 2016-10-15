@@ -7,13 +7,15 @@
 
 Object.assign = require('object-assign');
 
+// Make React global because hCard assumes it.
+global.React = require('react');
+
 const express = require('express'),
-      React = require('react'),
-      ReactDOMServer = require('react-dom/server'),
       compression = require('compression'),
       errorhandler = require('errorhandler'),
       path = require('path'),
       logger = require('morgan'),
+      routes = require('./routes/index'),
       app = express(),
       viewsPath = path.resolve(__dirname, 'views'),
       publicPath = path.resolve(__dirname, 'public'),
@@ -21,13 +23,12 @@ const express = require('express'),
       imgPath = path.resolve(__dirname, 'public', 'img'),
       distPath = path.resolve(__dirname, 'dist');
 
-// Make React global because hCard assumes it.
-global.React = React;
+// Views
 
 app.set('views', path.join(viewsPath));
 app.set('view engine', 'ejs');
 
-// Logging.
+// Logging
 
 switch (app.get('env')) {
   case 'development':
@@ -42,30 +43,14 @@ switch (app.get('env')) {
 }
 
 app.use(compression());
+
+// Static paths
+
 app.use('/css', express.static(cssPath));
 app.use('/img', express.static(imgPath));
 app.use(express.static(distPath));
 
-const hCardComponent = React.createFactory(require('./dist/main.js').default);
-const hCardProps = {
-  givenName: 'Sam',
-  surname: 'Fairfax',
-  email: 'sam.fairfax@fairfaxmedia.com.au',
-  phone: '0292822833',
-  houseNumber: '100',
-  street: 'Harris Street',
-  suburb: 'Pyrmont',
-  state: 'NSW',
-  postcode: '2009',
-  country: 'Australia'
-};
-
-app.get('/', (req, res) => {
-  res.render('index', {
-    hCard: ReactDOMServer.renderToString(hCardComponent(hCardProps))
-  });
-});
-
+app.use(routes);
 
 // Dev error handler.
 if (app.get('env') === 'development') {
