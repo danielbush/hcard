@@ -1,11 +1,14 @@
 
 
 const chai = require('chai'),
+      chaiAsPromised = require('chai-as-promised'),
       expect = chai.expect,
       sinon = require('sinon'),
       sinonChai = require('sinon-chai'),
-      user = require('../lib/middleware/user');
+      user = require('../lib/middleware/user'),
+      getCurrentUser = require('../lib/auth').getCurrentUser;
 
+chai.use(chaiAsPromised);
 chai.use(sinonChai);
 
 // Some tests to make sure our (fake) user middleware is behaving as
@@ -53,5 +56,21 @@ describe('user middleware', function () {
     expect(this.next).to.have.been.calledOnce;
   });
 
+
+});
+
+describe('getCurrentUser', function () {
+
+  beforeEach(function () {
+    this.currentUser = getCurrentUser();
+  });
+
+  it('should return a promise', function () {
+    expect(this.currentUser).to.be.a('Promise');
+  });
+
+  it('should fetch user id 1', function () {
+    return expect(this.currentUser).to.eventually.have.property('id', 1);
+  });
 
 });
