@@ -49,7 +49,7 @@ describe('user middleware', function () {
   });
 
   it('should call next', function () {
-    expect(this.next).to.have.been.called;
+    expect(this.next).to.have.been.calledOnce;
   });
 
 
