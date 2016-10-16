@@ -6,7 +6,8 @@ const chai = require('chai'),
       sinon = require('sinon'),
       sinonChai = require('sinon-chai'),
       user = require('../lib/middleware/user'),
-      getCurrentUser = require('../lib/auth').getCurrentUser,
+      auth = require('../lib/auth'),
+      getCurrentUser = auth.getCurrentUser,
       getDAO = require('../lib/dao').getDAO,
       FakeDAO = require('../lib/dao/fake_dao');
 
@@ -56,6 +57,22 @@ describe('user middleware', function () {
 
   it('should call next', function () {
     expect(this.next).to.have.been.calledOnce;
+  });
+
+  context('when getCurrentUser rejects', function () {
+
+    before(function () {
+      sinon.stub(auth, 'getCurrentUser', () => Promise.reject(new Error('some error')));
+    });
+
+    it('should call next with 401', function () {
+      expect(this.next.args[0][0]).to.have.property('status', 401);
+    });
+
+    after(function () {
+      auth.getCurrentUser.restore();
+    });
+
   });
 
 
