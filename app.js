@@ -24,6 +24,12 @@ const express = require('express'),
       imgPath = path.resolve(__dirname, 'public', 'img'),
       distPath = path.resolve(__dirname, 'dist');
 
+// Set req.user so we can get user details.
+//
+// We're pretending to be passport here.
+
+const user = require('./lib/middleware/user');
+
 // Views
 
 app.set('views', path.join(viewsPath));
@@ -47,6 +53,8 @@ app.use(compression());
 
 // Handle application/x-www-form-urlencoded.
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(user());
 
 // Static paths
 
