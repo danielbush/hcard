@@ -6,7 +6,9 @@ const chai = require('chai'),
       sinon = require('sinon'),
       sinonChai = require('sinon-chai'),
       user = require('../lib/middleware/user'),
-      getCurrentUser = require('../lib/auth').getCurrentUser;
+      getCurrentUser = require('../lib/auth').getCurrentUser,
+      getDAO = require('../lib/dao').getDAO,
+      FakeDAO = require('../lib/dao/fake_dao');
 
 chai.use(chaiAsPromised);
 chai.use(sinonChai);
@@ -71,6 +73,44 @@ describe('getCurrentUser', function () {
 
   it('should fetch user id 1', function () {
     return expect(this.currentUser).to.eventually.have.property('id', 1);
+  });
+
+});
+
+describe('DAO', function () {
+
+  describe('getDAO', function () {
+
+    // This would obviously have to change.
+
+    it('should return FakeDAO for all environments', function () {
+      expect(getDAO()).to.be.instanceof(FakeDAO);
+    });
+
+  });
+
+  describe('FakeDAO', function () {
+
+    describe('#findUserById', function () {
+
+      beforeEach(function () {
+        this.dao = new FakeDAO();
+      });
+
+      it('should return a promise', function () {
+        expect(this.dao.findUserById(1)).to.be.a('promise');
+      });
+
+      it('should resolve for user id=1', function () {
+        return expect(this.dao.findUserById(1)).to.eventually.have.property('id', 1);
+      });
+
+      it('should reject for user id=2', function () {
+        return expect(this.dao.findUserById(2)).to.be.rejected;
+      });
+
+    });
+
   });
 
 });
