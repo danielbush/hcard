@@ -13,6 +13,7 @@ global.React = require('react');
 const express = require('express'),
       compression = require('compression'),
       errorhandler = require('errorhandler'),
+      bodyParser = require('body-parser'),
       path = require('path'),
       logger = require('morgan'),
       routes = require('./routes/index'),
@@ -43,6 +44,9 @@ switch (app.get('env')) {
 }
 
 app.use(compression());
+
+// Handle application/x-www-form-urlencoded.
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Static paths
 

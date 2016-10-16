@@ -89,16 +89,41 @@ describe('/submit', function () {
   context('when js is turned off', function () {
 
     beforeEach(function () {
-      this.request = request(app).post('/submit');
+
+      hCardData = {
+        givenName: 'Sam',
+        surname: 'Fairfax',
+        email: 'sam.fairfax@fairfaxmedia.com.au',
+        phone: '0292822833',
+        houseNumber: '100',
+        street: 'Harris Street',
+        suburb: 'Pyrmont',
+        state: 'NSW',
+        postcode: '2009',
+        country: 'Australia'
+      };
+
+      this.request = request(app)
+        .post('/submit')
+        .type('form')
+        .send(hCardData);
+
     });
 
-    it('should redirect to /', function (done) {
+    xit('should redirect to /', function (done) {
       this.request
         .expect(303)
         .expect(res => {
           expect(res.header['location']).to.equal('/');
         })
         .end(err => done(err));
+    });
+
+    xit('should save details', function (done) {
+      // Not sure if worth having, maybe just check the output?
+    });
+
+    xit('should render changed details', function (done) {
     });
 
   });
