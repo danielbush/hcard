@@ -13,10 +13,10 @@ chai.use(sinonChai);
 
 describe('user middleware', function () {
 
-  beforeEach(function () {
+  beforeEach(function (done) {
     this.req = {};
     this.res = {};
-    this.next = sinon.spy();
+    this.next = sinon.spy(() => { done(); });
     this.user = user();
     this.user(this.req, this.res, this.next);
   });
@@ -31,6 +31,7 @@ describe('user middleware', function () {
 
   it('should set various properties on req.user', function () {
     expect(this.req.user).to.have.all.keys(
+      'id',
       'givenName',
       'surname',
       'email',
