@@ -86,13 +86,17 @@ describe('hCard builder page /', function () {
 
 describe('/submit', function () {
 
+  // We assume that we start with a record for
+  // Sam Fairfax, email: sam.fairfax@... etc
+  // because FakeDao gives us this.
+
   context('when js is turned off', function () {
 
     beforeEach(function () {
 
-      hCardData = {
-        givenName: 'Sam',
-        surname: 'Fairfax',
+      this.hCardData = () => ({
+        givenName: 'Sam-changed', // changed
+        surname: 'Fairfax-changed',
         email: 'sam.fairfax@fairfaxmedia.com.au',
         phone: '0292822833',
         houseNumber: '100',
@@ -101,17 +105,17 @@ describe('/submit', function () {
         state: 'NSW',
         postcode: '2009',
         country: 'Australia'
-      };
+      });
 
       this.request = request(app)
         .post('/submit')
-        .type('form')
-        .send(hCardData);
+        .type('form');
 
     });
 
-    xit('should redirect to /', function (done) {
+    it('should redirect to /', function (done) {
       this.request
+        .send(this.hCardData())
         .expect(303)
         .expect(res => {
           expect(res.header['location']).to.equal('/');
@@ -124,6 +128,14 @@ describe('/submit', function () {
     });
 
     xit('should render changed details', function (done) {
+      this.request
+        .send(this.hCardData())
+        .redirects(1)
+        .expect(res => {
+          let $ = cheerio.load(res.text);
+          expect($('input#givenName').val()).to.equal('Sam-changed');
+        })
+        .end(err => done(err));
     });
 
   });
