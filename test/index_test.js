@@ -117,7 +117,18 @@ describe('models', function () {
       });
 
       it('should resolve for user id=1', function () {
-        return expect(FakeUser.findUserById(1)).to.eventually.have.property('id', 1);
+        return expect(FakeUser.findUserById(1)).to.be.fulfilled;
+      });
+
+      it('should resolve a FakeUser instance for id=1', function () {
+        return expect(FakeUser.findUserById(1))
+            .to.eventually.be.instanceof(FakeUser)
+            .and.have.property('id', 1);
+      });
+
+      it('should have a given name of Sam', function () {
+        return expect(FakeUser.findUserById(1))
+            .to.eventually.have.property('givenName', 'Sam');
       });
 
       it('should reject for user id=2', function () {
