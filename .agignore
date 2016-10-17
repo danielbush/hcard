@@ -4,3 +4,5 @@ testBundle.js
 bundle.js
 bundle.test.js
 **.map
+dist/
+bootstrap.*

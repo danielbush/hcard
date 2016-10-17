@@ -18,7 +18,8 @@
   },
   "globals": {
     "module": true,
-    "fetch": true
+    "fetch": true,
+    "Promise": true
   },
   "rules": {
     "quotes": [2, "single", "avoid-escape"],
