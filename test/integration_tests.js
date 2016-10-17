@@ -136,7 +136,9 @@ describe('/submit', function () {
   });
 
   xcontext('when js is turned on', function () {
-    // TODO
+    // TODO: implement zombie equivalent tests.
+    // I've done this for one example above, leaving this
+    // for the moment.
   });
 
 });
