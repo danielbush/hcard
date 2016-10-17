@@ -161,6 +161,27 @@ describe('models', function () {
 
     });
 
+    describe('FakeUser.reset', function () {
+
+      before(function (done) {
+        FakeUser.findUserById(1)
+          .then(user => {
+            this.user = user;
+            user.save({ givenName: 'foo' }, err => {
+              done(err);
+            });
+          })
+          .catch(err => done(err));
+      });
+
+      it('should reset user 1 to original data', function () {
+        FakeUser.reset();
+        return expect(FakeUser.findUserById(1))
+            .to.eventually.have.property('givenName', 'Sam');
+      });
+
+    });
+
     describe('FakeUser#save', function () {
 
       beforeEach(function (done) {
