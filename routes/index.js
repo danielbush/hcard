@@ -18,4 +18,11 @@ router.post('/submit', (req, res, next) => {
   });
 });
 
+router.post('/update', (req, res, next) => {
+  req.user.save(req.body, err => {
+    if (err) next(err);
+    else res.sendStatus(200);
+  });
+});
+
 module.exports = router;

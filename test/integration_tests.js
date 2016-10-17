@@ -175,3 +175,56 @@ describe('/submit', function () {
   });
 
 });
+
+describe('/update', function () {
+
+  beforeEach(function () {
+    this.request = request(app)
+      .post('/update')
+      .type('form');
+  });
+
+  it('should return 200', function (done) {
+    this.request
+      .send({ givenName: 'newGiven' })
+      .expect(200)
+      .end(err => done(err));
+  });
+
+  it('should update the current user', function (done) {
+    this.request
+      .send({ givenName: 'newGiven' })
+      .expect(res => {
+        FakeUser.findUserById(1)
+          .then(user => {
+            expect(user.givenName).to.equal('newGiven');
+          })
+          .catch(err => done(err));
+      })
+      .end(err => done(err));
+  });
+
+  context('when updating has an error', function () {
+
+    before(function () {
+      sinon.stub(
+        FakeUser.prototype, 'save',
+        (changes, cb) => {
+          process.nextTick(() => { cb(new Error('Could not save')); } );
+        }
+      );
+    });
+
+    it('should show give a 500', function (done) {
+      this.request
+        .send({ givenName: 'newGiven' })
+        .expect(500)
+        .end(err => done(err));
+    });
+
+    after(function () {
+      FakeUser.prototype.save.restore();
+    });
+    
+  });
+});
