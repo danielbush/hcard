@@ -43,7 +43,7 @@ switch (app.get('env')) {
     break;
   case 'test':
     // So that test output isn't cluttered.
-    app.use(logger('dev', { skip: (req, res) => (res.statusCode < 400) }));
+    app.use(logger('dev', { skip: (req, res) => true }));
     break;
   default:
     app.use(logger('combined'));

@@ -15,7 +15,8 @@ router.get('/', (req, res, next) => {
 
 router.post('/submit', (req, res, next) => {
   req.user.save(req.body, err => {
-    res.redirect(303, '/');
+    if (err) next(err);
+    else res.redirect(303, '/');
   });
 });
 

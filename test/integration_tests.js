@@ -12,11 +12,13 @@
 
 const chai = require('chai'),
       expect = chai.expect,
+      sinon = require('sinon'),
       Browser = require('zombie'),
       request = require('supertest'),
       cheerio = require('cheerio'),
       port = 3001,
-      app = require('../app');
+      app = require('../app'),
+      FakeUser = require('../lib/models/fake_user');
 
 describe('hCard builder page /', function () {
 
@@ -131,6 +133,37 @@ describe('/submit', function () {
           expect($('input#givenName').val()).to.equal('Sam-changed');
         })
         .end(err => done(err));
+    });
+
+    context('when User#save has an error', function () {
+
+      // TODO: might be better here to unit test the route functions
+      // rather than mocking internal components and testing output.
+      // This is a lot of effort and the technique is a bit tricky.
+
+      before(function () {
+        sinon.stub(
+          FakeUser.prototype, 'save',
+          (changes, cb) => {
+            process.nextTick(() => { cb(new Error('Could not save')); } );
+          }
+        );
+      });
+
+      it('should show error instead of redirecting', function (done) {
+        this.request
+          .send(this.hCardData())
+          .expect(500)
+          .expect(res => {
+            expect(res.text).to.match(/error message for production mode/i);
+          })
+          .end(err => done(err));
+      });
+
+      after(function () {
+        FakeUser.prototype.save.restore();
+      });
+
     });
 
   });
