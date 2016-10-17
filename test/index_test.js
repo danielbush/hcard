@@ -1,6 +1,7 @@
 
 
-const chai = require('chai'),
+const _ = require('lodash'),
+      chai = require('chai'),
       chaiAsPromised = require('chai-as-promised'),
       expect = chai.expect,
       sinon = require('sinon'),
@@ -133,6 +134,69 @@ describe('models', function () {
 
       it('should reject for user id=2', function () {
         return expect(FakeUser.findUserById(2)).to.be.rejected;
+      });
+
+    });
+
+    describe('FakeUser#save', function () {
+
+      beforeEach(function (done) {
+        this.changes = {
+          givenName: 'Sam-changed',
+          surname: 'Fairfax-changed',
+          email: 'sam.fairfax-changed@fairfaxmedia.com.au',
+          phone: '0292822833-changed',
+          houseNumber: '100-changed',
+          street: 'Harris-changed Street',
+          suburb: 'Pyrmont-changed',
+          state: 'QLD',
+          postcode: '2010',
+          country: 'New Zealand'
+        };
+        this.fields = [
+          'givenName', 'surname', 'email', 'phone', 'houseNumber',
+          'street', 'suburb', 'state', 'postcode', 'country'
+        ];
+        FakeUser.reset();
+        FakeUser.findUserById(1)
+          .then(user => {
+            this.user = user;
+            done();
+          })
+          .catch(err => done(err));
+      });
+
+
+      it('should not raise an error', function (done) {
+        this.user.save(this.changes, (err) => {
+          done(err);
+        });
+      });
+
+      it('should update all hcard attributes', function (done) {
+        this.user.save(this.changes, (err) => {
+          expect(_.pick(this.user, this.fields))
+            .to.deep.equal({
+              givenName: 'Sam-changed',
+              surname: 'Fairfax-changed',
+              email: 'sam.fairfax-changed@fairfaxmedia.com.au',
+              phone: '0292822833-changed',
+              houseNumber: '100-changed',
+              street: 'Harris-changed Street',
+              suburb: 'Pyrmont-changed',
+              state: 'QLD',
+              postcode: '2010',
+              country: 'New Zealand'
+            });
+          done(err);
+        });
+      });
+
+      it('should not update the id', function (done) {
+        this.user.save({ id: 'new-id' }, (err) => {
+          expect(this.user.id).to.equal(1);
+          done(err);
+        });
       });
 
     });
