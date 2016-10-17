@@ -18,18 +18,13 @@ const express = require('express'),
       path = require('path'),
       logger = require('morgan'),
       routes = require('./routes/index'),
+      user = require('./lib/middleware/user'),
       app = express(),
       viewsPath = path.resolve(__dirname, 'views'),
       publicPath = path.resolve(__dirname, 'public'),
       cssPath = path.resolve(__dirname, 'public', 'css'),
       imgPath = path.resolve(__dirname, 'public', 'img'),
       distPath = path.resolve(__dirname, 'dist');
-
-// Set req.user so we can get user details.
-//
-// We're pretending to be passport here.
-
-const user = require('./lib/middleware/user');
 
 // Views
 
@@ -53,9 +48,14 @@ switch (app.get('env')) {
 app.use(compression());
 
 // Handle application/x-www-form-urlencoded.
+
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //app.use(multer({ dest: 'uploads/' }).single('avatar'));
+
+// Set req.user so we can get user details.
+//
+// We're pretending to be passport here.
 
 app.use(user());
 
@@ -68,11 +68,13 @@ app.use(express.static(distPath));
 app.use(routes);
 
 // Dev error handler.
+
 if (app.get('env') === 'development') {
   app.use(errorhandler());
 }
 
 // Default error handler.
+
 else {
   app.use((err, req, res, next) => {
     res.status(err.status || 500);
