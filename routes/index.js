@@ -5,12 +5,10 @@ const router = require('express').Router(),
       hCardComponent = React.createFactory(require('../dist/main.js').default);
 
 router.get('/', (req, res, next) => {
-
   res.render('index', {
     hCardData: JSON.stringify(req.user),
     hCard: ReactDOMServer.renderToString(hCardComponent(req.user))
   });
-
 });
 
 router.post('/submit', (req, res, next) => {
