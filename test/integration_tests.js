@@ -88,7 +88,6 @@ describe('/submit', function () {
 
   // We assume that we start with a record for
   // Sam Fairfax, email: sam.fairfax@... etc
-  // because FakeDao gives us this.
 
   context('when js is turned off', function () {
 

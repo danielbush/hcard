@@ -8,8 +8,8 @@ const chai = require('chai'),
       user = require('../lib/middleware/user'),
       auth = require('../lib/auth'),
       getCurrentUser = auth.getCurrentUser,
-      getDAO = require('../lib/dao').getDAO,
-      FakeDAO = require('../lib/dao/fake_dao');
+      dao = require('../lib/dao'),
+      FakeUser = require('../lib/models/fake_user');
 
 chai.use(chaiAsPromised);
 chai.use(sinonChai);
@@ -94,36 +94,35 @@ describe('getCurrentUser', function () {
 
 });
 
-describe('DAO', function () {
+describe('dao', function () {
 
-  describe('getDAO', function () {
+  describe('dao.getUserDao', function () {
 
-    // This would obviously have to change.
-
-    it('should return FakeDAO for all environments', function () {
-      expect(getDAO()).to.be.instanceof(FakeDAO);
+    it('should get a fake user model', function () {
+      expect(dao.getUserDao().name).to.equal('FakeUser');
+      // It might get a real User model if NODE_ENV is production...
     });
 
   });
 
-  describe('FakeDAO', function () {
+});
 
-    describe('#findUserById', function () {
+describe('models', function () {
 
-      beforeEach(function () {
-        this.dao = new FakeDAO();
-      });
+  describe('FakeUser', function () {
+
+    describe('FakeUser.findUserById', function () {
 
       it('should return a promise', function () {
-        expect(this.dao.findUserById(1)).to.be.a('promise');
+        expect(FakeUser.findUserById(1)).to.be.a('promise');
       });
 
       it('should resolve for user id=1', function () {
-        return expect(this.dao.findUserById(1)).to.eventually.have.property('id', 1);
+        return expect(FakeUser.findUserById(1)).to.eventually.have.property('id', 1);
       });
 
       it('should reject for user id=2', function () {
-        return expect(this.dao.findUserById(2)).to.be.rejected;
+        return expect(FakeUser.findUserById(2)).to.be.rejected;
       });
 
     });
@@ -131,3 +130,4 @@ describe('DAO', function () {
   });
 
 });
+
