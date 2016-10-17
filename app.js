@@ -1,9 +1,9 @@
 
-// Maybe polyfill for react 15 and Object.assign.
+// Maybe polyfill Object.assign.
 //
-// object-assign@4.1 will decide if to polyfill or not.
+// object-assign@4.1 will decide if to polyfill or not in node.
 // Also, we need to be using react 15.1+.
-// https://github.com/facebook/react/issues/6451#issuecomment-212154690
+// https://github.com/facebook/react/issues/6451
 
 Object.assign = require('object-assign');
 
@@ -14,6 +14,7 @@ const express = require('express'),
       compression = require('compression'),
       errorhandler = require('errorhandler'),
       bodyParser = require('body-parser'),
+      //multer = require('multer'),
       path = require('path'),
       logger = require('morgan'),
       routes = require('./routes/index'),
@@ -53,6 +54,8 @@ app.use(compression());
 
 // Handle application/x-www-form-urlencoded.
 app.use(bodyParser.urlencoded({ extended: true }));
+
+//app.use(multer({ dest: 'uploads/' }).single('avatar'));
 
 app.use(user());
 
