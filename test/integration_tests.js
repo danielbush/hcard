@@ -122,11 +122,7 @@ describe('/submit', function () {
         .end(err => done(err));
     });
 
-    xit('should save details', function (done) {
-      // Not sure if worth having, maybe just check the output?
-    });
-
-    xit('should render changed details', function (done) {
+    it('should render changed details', function (done) {
       this.request
         .send(this.hCardData())
         .redirects(1)
