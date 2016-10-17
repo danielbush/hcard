@@ -7,7 +7,6 @@ const chai = require('chai'),
       sinonChai = require('sinon-chai'),
       user = require('../lib/middleware/user'),
       auth = require('../lib/auth'),
-      getCurrentUser = auth.getCurrentUser,
       dao = require('../lib/dao'),
       FakeUser = require('../lib/models/fake_user');
 
@@ -81,7 +80,7 @@ describe('user middleware', function () {
 describe('getCurrentUser', function () {
 
   beforeEach(function () {
-    this.currentUser = getCurrentUser();
+    this.currentUser = auth.getCurrentUser();
   });
 
   it('should return a promise', function () {
