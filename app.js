@@ -7,8 +7,6 @@
 
 Object.assign = require('object-assign');
 
-// Make React global because hCard assumes it.
-global.React = require('react');
 
 const express = require('express'),
       compression = require('compression'),
