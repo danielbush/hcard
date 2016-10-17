@@ -136,6 +136,29 @@ describe('models', function () {
         return expect(FakeUser.findUserById(2)).to.be.rejected;
       });
 
+      context('when the record is changed', function () {
+
+        before(function (done) {
+          FakeUser.findUserById(1)
+            .then(user => {
+              this.user = user;
+              user.save({ givenName: 'foo' }, err => {
+                done(err);
+              });
+            })
+            .catch(err => done(err));
+        });
+
+        it('should retrieve the changed user', function () {
+          // We want this to behave as an in-memory store
+          // to mimic a real store.
+
+          return expect(FakeUser.findUserById(1))
+              .to.eventually.have.property('givenName', 'foo');
+        });
+
+      });
+
     });
 
     describe('FakeUser#save', function () {
