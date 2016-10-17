@@ -27,6 +27,14 @@ describe('user middleware', function () {
     this.user(this.req, this.res, this.next);
   });
 
+  before(function () {
+    sinon.stub(FakeUser, 'findUserById',
+               () => Promise.resolve({ id: 1, givenName: 'foo', email: 'foo@example.com' }));
+  });
+  after(function () {
+    FakeUser.findUserById.restore();
+  });
+
   it('should return a function', function () {
     expect(this.user).to.be.a('function');
   });
@@ -36,19 +44,7 @@ describe('user middleware', function () {
   });
 
   it('should set various properties on req.user', function () {
-    expect(this.req.user).to.have.all.keys(
-      'id',
-      'givenName',
-      'surname',
-      'email',
-      'phone',
-      'houseNumber',
-      'street',
-      'suburb',
-      'state',
-      'postcode',
-      'country'
-    );
+    expect(this.req.user).to.have.all.keys('id', 'givenName', 'email');
   });
 
   it('should set req.user.email', function () {
@@ -127,11 +123,6 @@ describe('models', function () {
             .and.have.property('id', 1);
       });
 
-      it('should have a given name of Sam', function () {
-        return expect(FakeUser.findUserById(1))
-            .to.eventually.have.property('givenName', 'Sam');
-      });
-
       it('should reject for user id=2', function () {
         return expect(FakeUser.findUserById(2)).to.be.rejected;
       });
@@ -177,7 +168,8 @@ describe('models', function () {
       it('should reset user 1 to original data', function () {
         FakeUser.reset();
         return expect(FakeUser.findUserById(1))
-            .to.eventually.have.property('givenName', 'Sam');
+            .to.eventually.have.all.keys('id')
+            .and.to.have.property('id', 1);
       });
 
     });
