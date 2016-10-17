@@ -2,12 +2,13 @@
 const router = require('express').Router(),
       React = require('react'),
       ReactDOMServer = require('react-dom/server'),
-      hCardComponent = React.createFactory(require('../dist/main.js').default);
+      hCardComponent = require('../dist/main.js').default,
+      hCardElement = React.createFactory(hCardComponent);
 
 router.get('/', (req, res, next) => {
   res.render('index', {
     hCardData: JSON.stringify(req.user),
-    hCard: ReactDOMServer.renderToString(hCardComponent(req.user))
+    hCard: ReactDOMServer.renderToString(hCardElement(req.user))
   });
 });
 
