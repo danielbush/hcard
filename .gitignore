@@ -3,3 +3,4 @@ build/
 *.log
 *.retry
 .pid
+dist/react*

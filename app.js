@@ -61,7 +61,7 @@ app.use(user());
 
 app.use('/css', express.static(cssPath));
 app.use('/img', express.static(imgPath));
-app.use(express.static(distPath));
+app.use('/dist', express.static(distPath));
 
 app.use(routes);
 

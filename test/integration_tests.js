@@ -52,7 +52,7 @@ describe('hCard builder page /', function () {
 
   });
 
-  xcontext('when js is turned on', function () {
+  context('when js is turned on (zombie)', function () {
 
     before(function (done) {
       const timeout = 30*1000;
