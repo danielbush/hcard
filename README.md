@@ -23,6 +23,7 @@ Running tests
 ## Notes and feedback
 
 * I'm assuming node 6.
+
 * I opted for a "User model" approach for the store eg `User.find*`
   `User#save` etc. The other option might have been to go with a
   "collection" model like the mongodb driver eg `db.users.find` etc.
@@ -34,6 +35,10 @@ Running tests
   store for *test* and *development* environments, and a file
   for production.  But it just seemed easier not to pick one
   given the openness of the requirements.
+
+* I initially started making the model promise-based but switched
+  to callbacks.  However `User.findUserById` is still promise-based.
+  I probably wouldn't mix the two normally.
 
 * Instead of a real store, I have a `FakeUser` class that acts as the
   User model with a "just good enough" memory store.  This class
