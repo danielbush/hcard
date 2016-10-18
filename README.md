@@ -61,14 +61,13 @@ Running tests
   * I used mocha/chai/sinon for units tests.
   * Supertest for integration tests not involving a js-enabled client.
   * To test the js-enabled case I used `zombie`, but found it was
-    slow to download some assets (probably the react cdn), and
-    greatly slowed tests and even caused timeouts.
-    I disabled the tests using `xcontext`.
-  * The zombie browser will try to get react from the cdn which
-    which isn't a great thing in a test (these are integration tests).
-    TODO
-  * I'd probably stick with acceptance-style tests in future eg
-    mocha + wd or cucumber + wd (selenium) for testing full browser
+    slow to download some assets (probably the react cdn), so...
+*   Probably best to run unit and integration tests without reliance
+    on external network - so I put react client libs in `dist/`.
+    The version is slightly different to the original version used
+    for the server - we'd pin this in `package.json` probably.
+  * The other option might be to stick with acceptance-style selenium tests eg
+    mocha + wd or cucumber + wd for testing full browser
     functionality even for integration tests.
     However this would make testing things like http status codes harder.
 
