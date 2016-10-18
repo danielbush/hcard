@@ -1,11 +1,11 @@
 
 const router = require('express').Router(),
-      { hCardElement, render } = require('../lib/hcard');
+      render = require('../lib/hcard');
 
 router.get('/', (req, res, next) => {
   res.render('index', {
     hCardData: JSON.stringify(req.user),
-    hCard: render(hCardElement(req.user))
+    hCard: render(req.user)
   });
 });
 
